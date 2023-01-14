@@ -1,6 +1,7 @@
 package com.example.book_crud.domain;
 
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -22,9 +23,11 @@ public class MockDataEntity {
     @Id
     private Integer id;
 
+    private String name;
+
     private String url;
 
-    private int ifUse;
+    private String ifUse;
 
 
     private Integer httpRespCode;
@@ -39,11 +42,16 @@ public class MockDataEntity {
 
     private String reqMsg;
 
+    @TableField(exist = false)
+    private String errorMsg;
+
     @Override
     public String toString() {
         return "MockDataEntity{" +
                 "id=" + id +
+                ", name='" + name + '\'' +
                 ", url='" + url + '\'' +
+                ", ifUse=" + ifUse +
                 ", httpRespCode=" + httpRespCode +
                 ", respMsg='" + respMsg + '\'' +
                 ", latency=" + latency +
@@ -51,6 +59,4 @@ public class MockDataEntity {
                 ", reqMsg='" + reqMsg + '\'' +
                 '}';
     }
-
-
 }

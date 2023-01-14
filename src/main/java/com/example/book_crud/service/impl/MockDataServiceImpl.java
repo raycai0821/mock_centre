@@ -1,13 +1,12 @@
 package com.example.book_crud.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.book_crud.dao.BookDao;
 import com.example.book_crud.dao.MockDataDao;
-import com.example.book_crud.domain.Book;
 import com.example.book_crud.domain.MockDataEntity;
 import com.example.book_crud.service.MockDataService;
 import com.sun.istack.internal.NotNull;
@@ -34,24 +33,33 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity>  implements MockDataService {
+public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity> implements MockDataService {
 
     @Autowired
     private MockDataDao mockDataDao;
 
     @Override
     public boolean saveMockData(MockDataEntity mockDataEntity) {
+        log.info("保存前开始校验请求");
+        if (validatePageRequest(mockDataEntity)) {
+            return mockDataDao.insert(mockDataEntity) > 0;
+        }
         return false;
     }
 
     @Override
     public boolean modifyMockData(MockDataEntity mockDataEntity) {
+        log.info("修改前开始校验请求");
+        if (validatePageRequest(mockDataEntity)) {
+            return mockDataDao.updateById(mockDataEntity) > 0;
+        }
         return false;
+
     }
 
     @Override
     public boolean delete(Integer id) {
-        return false;
+        return mockDataDao.deleteById(id) > 0;
     }
 
     @Override
@@ -65,8 +73,9 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
     public IPage<MockDataEntity> getPage(int currentPage, int pageSize, MockDataEntity mockDataEntity) {
         LambdaQueryWrapper<MockDataEntity> lqw = new LambdaQueryWrapper<>();
         lqw.like(Strings.isNotEmpty(mockDataEntity.getUrl()), MockDataEntity::getUrl, mockDataEntity.getUrl());
+        lqw.like(Strings.isNotEmpty(mockDataEntity.getName()), MockDataEntity::getName, mockDataEntity.getName());
         lqw.eq(Objects.nonNull(mockDataEntity.getId()), MockDataEntity::getId, mockDataEntity.getId());
-        lqw.like(Objects.nonNull(mockDataEntity.getIfUse()), MockDataEntity::getIfUse, mockDataEntity.getIfUse());
+        lqw.eq(Strings.isNotEmpty(mockDataEntity.getIfUse()), MockDataEntity::getIfUse, mockDataEntity.getIfUse());
         IPage page = new Page(currentPage, pageSize);
         mockDataDao.selectPage(page, lqw);
         return page;
@@ -81,7 +90,7 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
 
         LambdaQueryWrapper<MockDataEntity> queryWrapper = Wrappers.lambdaQuery(MockDataEntity.class);
         queryWrapper.eq(MockDataEntity::getUrl, url);
-        queryWrapper.eq(MockDataEntity::getIfUse, 1);
+        queryWrapper.eq(MockDataEntity::getIfUse, "ACTIVE");
         MockDataEntity mockDataEntity = mockDataDao.selectOne(queryWrapper);
         if (null != mockDataEntity) {
             handleResponse(mockDataEntity);
@@ -114,7 +123,7 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
 
 
     /**
-     * @desc 从请求李获取请求body
+     * @desc 从请求里获取请求body
      */
 
     public String getReqBody(@NotNull HttpServletRequest request) {
@@ -142,10 +151,37 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
         return sb.toString();
     }
 
+    /**
+     * 替换mock响应体中的变量
+     *
+     * @param origin
+     * @return
+     */
+
     private boolean needReplace(String origin) {
 
         return (origin.contains("_UUID") || origin.contains("_AMT") || origin.contains("_ACCT"));
 
+    }
+
+    /**
+     * 校验页面传递过来的respmsg请求体是否符合格式
+     *
+     * @return
+     */
+    public boolean validatePageRequest(MockDataEntity mockDataEntity) {
+
+        boolean validateResult = true;
+
+        //如果添加的是json格式则校验
+        if (null != mockDataEntity.getContentType() && ("json").equalsIgnoreCase(mockDataEntity.getContentType())) {
+            try {
+                JSONObject.parseObject(mockDataEntity.getRespMsg());
+            } catch (Exception e) {
+                validateResult = false;
+            }
+        }
+        return validateResult;
     }
 
 

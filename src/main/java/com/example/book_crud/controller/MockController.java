@@ -1,10 +1,6 @@
 package com.example.book_crud.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.example.book_crud.controller.utils.Result;
-import com.example.book_crud.domain.Book;
 import com.example.book_crud.domain.MockDataEntity;
-import com.example.book_crud.service.BookService;
 import com.example.book_crud.service.MockDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

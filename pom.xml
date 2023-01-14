@@ -11,7 +11,7 @@
     <groupId>com.example</groupId>
     <artifactId>Book_CRUD</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Book_CRUD</name>
+    <name>mock-centre</name>
     <description>Book_CRUD</description>
     <properties>
         <java.version>11</java.version>
@@ -20,6 +20,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.83</version>
         </dependency>
 
         <dependency>
