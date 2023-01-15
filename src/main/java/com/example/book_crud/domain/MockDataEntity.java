@@ -40,6 +40,9 @@ public class MockDataEntity {
 
     private String contentType;
 
+    /**
+     * 记录请求记录
+     */
     private String reqMsg;
 
     @TableField(exist = false)

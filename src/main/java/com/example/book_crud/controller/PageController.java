@@ -29,7 +29,7 @@ public class PageController {
     @PostMapping
     public Result save(@RequestBody MockDataEntity mockDataEntity) {
         log.info("开始新增mock" + mockDataEntity);
-        return new Result(mockDataService.saveMockData(mockDataEntity));
+        return mockDataService.saveMockData(mockDataEntity);
     }
 
     @PutMapping

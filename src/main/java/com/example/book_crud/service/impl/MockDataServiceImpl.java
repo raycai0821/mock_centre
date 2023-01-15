@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.book_crud.controller.utils.BaseResp;
+import com.example.book_crud.controller.utils.Result;
 import com.example.book_crud.dao.MockDataDao;
 import com.example.book_crud.domain.MockDataEntity;
 import com.example.book_crud.service.MockDataService;
@@ -14,15 +16,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
+import java.util.logging.XMLFormatter;
 
 
 /**
@@ -39,21 +46,23 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
     private MockDataDao mockDataDao;
 
     @Override
-    public boolean saveMockData(MockDataEntity mockDataEntity) {
+    public Result saveMockData(MockDataEntity mockDataEntity) {
         log.info("保存前开始校验请求");
-        if (validatePageRequest(mockDataEntity)) {
-            return mockDataDao.insert(mockDataEntity) > 0;
+        Result validateResult = validatePageRequest(mockDataEntity);
+        if (validateResult.getFlag()) {
+            return new Result(mockDataDao.insert(mockDataEntity) > 0, null);
         }
-        return false;
+        return new Result(validateResult.getData());
     }
 
     @Override
-    public boolean modifyMockData(MockDataEntity mockDataEntity) {
+    public Result modifyMockData(MockDataEntity mockDataEntity) {
         log.info("修改前开始校验请求");
-        if (validatePageRequest(mockDataEntity)) {
-            return mockDataDao.updateById(mockDataEntity) > 0;
+        Result validateResult = validatePageRequest(mockDataEntity);
+        if (validateResult.getFlag()) {
+            return new Result(mockDataDao.updateById(mockDataEntity) > 0);
         }
-        return false;
+        return new Result(validateResult.getData());
 
     }
 
@@ -169,20 +178,32 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
      *
      * @return
      */
-    public boolean validatePageRequest(MockDataEntity mockDataEntity) {
+    public Result validatePageRequest(MockDataEntity mockDataEntity) {
 
-        boolean validateResult = true;
 
         //如果添加的是json格式则校验
-        if (null != mockDataEntity.getContentType() && ("json").equalsIgnoreCase(mockDataEntity.getContentType())) {
-            try {
-                JSONObject.parseObject(mockDataEntity.getRespMsg());
-            } catch (Exception e) {
-                validateResult = false;
+        if (null != mockDataEntity.getContentType()) {
+            if (("json").equalsIgnoreCase(mockDataEntity.getContentType())) {
+                try {
+                    JSONObject.parseObject(mockDataEntity.getRespMsg());
+                } catch (Exception e) {
+                    return new Result(false, new BaseResp(mockDataEntity.getContentType() + "格式错误"));
+                }
+                //xml校验
+            } else if (("xml").equalsIgnoreCase(mockDataEntity.getContentType())) {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                try {
+                    DocumentBuilder builder = factory.newDocumentBuilder();
+                    builder.parse(new InputSource(new StringReader(mockDataEntity.getRespMsg())));
+                } catch (Exception e) {
+
+                    return new Result(false, new BaseResp(mockDataEntity.getContentType() + "格式错误"));
+                }
             }
         }
-        return validateResult;
+
+        return new Result(true);
     }
-
-
 }
+
+
