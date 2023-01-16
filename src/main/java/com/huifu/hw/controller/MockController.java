@@ -1,7 +1,8 @@
-package com.example.book_crud.controller;
+package com.huifu.hw.controller;
 
-import com.example.book_crud.domain.MockDataEntity;
-import com.example.book_crud.service.MockDataService;
+import com.huifu.hw.controller.utils.BaseResp;
+import com.huifu.hw.domain.MockDataEntity;
+import com.huifu.hw.service.MockDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api")
@@ -21,6 +23,9 @@ public class MockController {
     public ResponseEntity getMockData(HttpServletRequest request) {
         String url = request.getRequestURI();
         MockDataEntity mockDataEntity = mockDataService.handleRequest(request);
+        if (Objects.isNull(mockDataEntity)){
+            return new ResponseEntity(new BaseResp("未找到对应MOCK数据"),HttpStatus.BAD_REQUEST);
+        }
         Integer latency = mockDataEntity.getLatency();
         Integer http_resp_code = mockDataEntity.getHttpRespCode();
         if (null != latency) {

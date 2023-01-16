@@ -1,10 +1,10 @@
-package com.example.book_crud.controller.utils;
+package com.huifu.hw.controller.utils;
 
 import lombok.Data;
 
 @Data
 public class Result {
-    private Boolean flag;
+    private Boolean flag = false;
     private Object data;
 
     public Result(){

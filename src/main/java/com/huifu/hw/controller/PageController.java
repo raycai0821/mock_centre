@@ -1,9 +1,9 @@
-package com.example.book_crud.controller;
+package com.huifu.hw.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.example.book_crud.controller.utils.Result;
-import com.example.book_crud.domain.MockDataEntity;
-import com.example.book_crud.service.MockDataService;
+import com.huifu.hw.controller.utils.Result;
+import com.huifu.hw.domain.MockDataEntity;
+import com.huifu.hw.service.MockDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +34,7 @@ public class PageController {
 
     @PutMapping
     public Result update(@RequestBody MockDataEntity mockDataEntity) {
-        return new Result(mockDataService.modifyMockData(mockDataEntity));
+        return mockDataService.modifyMockData(mockDataEntity);
     }
 
     @DeleteMapping("/{id}")

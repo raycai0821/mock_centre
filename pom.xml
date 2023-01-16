@@ -8,13 +8,13 @@
         <version>2.5.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>Book_CRUD</artifactId>
+    <groupId>com.huifu.hw</groupId>
+    <artifactId>mock_centre</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>mock-centre</name>
-    <description>Book_CRUD</description>
+    <description>mock中心</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>8</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -58,7 +58,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.2.6</version>
+            <version>1.1.10</version>
         </dependency>
 
     </dependencies>

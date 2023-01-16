@@ -1,4 +1,4 @@
-package com.example.book_crud.service.impl;
+package com.huifu.hw.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -6,30 +6,30 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.book_crud.controller.utils.BaseResp;
-import com.example.book_crud.controller.utils.Result;
-import com.example.book_crud.dao.MockDataDao;
-import com.example.book_crud.domain.MockDataEntity;
-import com.example.book_crud.service.MockDataService;
-import com.sun.istack.internal.NotNull;
+import com.huifu.hw.controller.utils.BaseResp;
+import com.huifu.hw.controller.utils.Result;
+import com.huifu.hw.dao.MockDataDao;
+import com.huifu.hw.domain.MockDataEntity;
+import com.huifu.hw.service.MockDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
-import java.util.logging.XMLFormatter;
+import java.sql.SQLException;
+import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
 
 
 /**
@@ -49,19 +49,35 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
     public Result saveMockData(MockDataEntity mockDataEntity) {
         log.info("保存前开始校验请求");
         Result validateResult = validatePageRequest(mockDataEntity);
+
         if (validateResult.getFlag()) {
-            return new Result(mockDataDao.insert(mockDataEntity) > 0, null);
+            try {
+                mockDataDao.insert(mockDataEntity);
+            } catch (DuplicateKeyException e) {
+                return new Result(new BaseResp("URL重复"));
+            }
+            return new Result(true);
         }
         return new Result(validateResult.getData());
     }
 
     @Override
     public Result modifyMockData(MockDataEntity mockDataEntity) {
+
         log.info("修改前开始校验请求");
+
         Result validateResult = validatePageRequest(mockDataEntity);
+
         if (validateResult.getFlag()) {
-            return new Result(mockDataDao.updateById(mockDataEntity) > 0);
+            try {
+                mockDataDao.updateById(mockDataEntity);
+                //捕获sql异常
+            } catch (DuplicateKeyException e) {
+                return new Result(new BaseResp("URL重复"));
+            }
+            return new Result(true);
         }
+
         return new Result(validateResult.getData());
 
     }
@@ -101,7 +117,9 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
         queryWrapper.eq(MockDataEntity::getUrl, url);
         queryWrapper.eq(MockDataEntity::getIfUse, "ACTIVE");
         MockDataEntity mockDataEntity = mockDataDao.selectOne(queryWrapper);
+
         if (null != mockDataEntity) {
+            log.info("查询到mock数据" + mockDataEntity.getName());
             handleResponse(mockDataEntity);
             return mockDataEntity;
         }
@@ -135,7 +153,7 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
      * @desc 从请求里获取请求body
      */
 
-    public String getReqBody(@NotNull HttpServletRequest request) {
+    public String getReqBody(HttpServletRequest request) {
 
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder("");
@@ -179,7 +197,6 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
      * @return
      */
     public Result validatePageRequest(MockDataEntity mockDataEntity) {
-
 
         //如果添加的是json格式则校验
         if (null != mockDataEntity.getContentType()) {

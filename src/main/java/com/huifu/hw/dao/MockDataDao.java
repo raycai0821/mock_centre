@@ -1,8 +1,8 @@
-package com.example.book_crud.dao;
+package com.huifu.hw.dao;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.book_crud.domain.MockDataEntity;
+import com.huifu.hw.domain.MockDataEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

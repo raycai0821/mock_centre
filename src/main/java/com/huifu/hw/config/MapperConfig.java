@@ -1,4 +1,4 @@
-package com.example.book_crud.config;
+package com.huifu.hw.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;

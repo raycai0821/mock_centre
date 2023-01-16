@@ -1,4 +1,4 @@
-package com.example.book_crud.domain;
+package com.huifu.hw.domain;
 
 
 import com.baomidou.mybatisplus.annotation.TableField;

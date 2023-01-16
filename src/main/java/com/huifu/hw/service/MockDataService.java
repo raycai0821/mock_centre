@@ -1,10 +1,10 @@
-package com.example.book_crud.service;
+package com.huifu.hw.service;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.book_crud.controller.utils.Result;
-import com.example.book_crud.domain.MockDataEntity;
+import com.huifu.hw.controller.utils.Result;
+import com.huifu.hw.domain.MockDataEntity;
 
 import javax.servlet.http.HttpServletRequest;
 
