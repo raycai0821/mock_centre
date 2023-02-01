@@ -16,6 +16,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.testng.annotations.Test;
 import org.xml.sax.InputSource;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,9 +28,8 @@ import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
-import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -221,6 +221,16 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
 
         return new Result(true);
     }
+
+
+    @Test
+    public void test(){
+
+        String expectedSqlResult = "MEHK1220,CEHK001869,CNY,1000,990,FROZEN,PNR00002|MEHK1220,CEHK001869,CNY,1000,990,FROZEN,PNR00002";
+        List<String> list= Arrays.asList(expectedSqlResult.split("\\|"));
+        log.info(String.valueOf(list));
+    }
+
 }
 
 
