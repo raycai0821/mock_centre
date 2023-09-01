@@ -1,5 +1,6 @@
 package com.huifu.hw.controller;
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.huifu.hw.controller.utils.Result;
 import com.huifu.hw.domain.MockDataEntity;
@@ -7,6 +8,8 @@ import com.huifu.hw.service.MockDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 /**
  * @author leifeng.cai
@@ -52,10 +55,11 @@ public class PageController {
         log.info("-----开始分页查询-----" + "查询条件" + mockDataEntity);
         IPage<MockDataEntity> page = mockDataService.getPage(currentPage, pageSize, mockDataEntity);
         //如果当前页码值大于总页码数，那么重新执行查询操作，使用最大页码值作为当前页码值。
-        if (currentPage > page.getPages()) {
+        if (currentPage > page.getPages() && 0 != page.getTotal()) {
             page = mockDataService.getPage((int) page.getPages(), pageSize);
         }
         return new Result(true, page);
     }
+
 
 }

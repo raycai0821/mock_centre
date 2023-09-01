@@ -111,6 +111,7 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
     public MockDataEntity handleRequest(HttpServletRequest request) {
         String url = request.getRequestURI();
         log.info("url为" + url);
+        log.info("请求头X-ClientId" + request.getHeader("X-ClientId"));
         log.info("body请求体" + getReqBody(request));
 
         LambdaQueryWrapper<MockDataEntity> queryWrapper = Wrappers.lambdaQuery(MockDataEntity.class);
@@ -178,6 +179,7 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
         return sb.toString();
     }
 
+
     /**
      * 替换mock响应体中的变量
      *
@@ -220,15 +222,6 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
         }
 
         return new Result(true);
-    }
-
-
-    @Test
-    public void test(){
-
-        String expectedSqlResult = "MEHK1220,CEHK001869,CNY,1000,990,FROZEN,PNR00002|MEHK1220,CEHK001869,CNY,1000,990,FROZEN,PNR00002";
-        List<String> list= Arrays.asList(expectedSqlResult.split("\\|"));
-        log.info(String.valueOf(list));
     }
 
 }
