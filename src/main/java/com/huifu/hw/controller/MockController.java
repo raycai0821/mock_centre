@@ -4,6 +4,7 @@ import com.huifu.hw.controller.utils.BaseResp;
 import com.huifu.hw.domain.MockDataEntity;
 import com.huifu.hw.service.MockDataService;
 //import com.huifu.hw.service.MockRiskService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class MockController {
 
     @Autowired
@@ -32,6 +34,7 @@ public class MockController {
 
     @RequestMapping("/**")
     public ResponseEntity getMockData(HttpServletRequest request) {
+        log.info("测试javaovao");
         MockDataEntity mockDataEntity = mockDataService.handleRequest(request);
         if (Objects.isNull(mockDataEntity)){
             return new ResponseEntity(new BaseResp("未找到对应MOCK数据"),HttpStatus.BAD_REQUEST);
@@ -49,9 +52,11 @@ public class MockController {
         switch (mockDataEntity.getContentType()) {
             case "json":
                 httpHeaders.add("Content-Type", "application/json");
+                log.info("泡得到不");
                 break;
             case "xml":
                 httpHeaders.add("Content-Type", "text/xml");
+                log.info("泡不到");
                 break;
         }
 
