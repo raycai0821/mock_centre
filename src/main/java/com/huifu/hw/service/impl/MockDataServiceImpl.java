@@ -100,6 +100,7 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
         lqw.like(Strings.isNotEmpty(mockDataEntity.getUrl()), MockDataEntity::getUrl, mockDataEntity.getUrl());
         lqw.like(Strings.isNotEmpty(mockDataEntity.getName()), MockDataEntity::getName, mockDataEntity.getName());
         lqw.eq(Objects.nonNull(mockDataEntity.getId()), MockDataEntity::getId, mockDataEntity.getId());
+        lqw.orderByDesc(MockDataEntity::getId);
         lqw.eq(Strings.isNotEmpty(mockDataEntity.getIfUse()), MockDataEntity::getIfUse, mockDataEntity.getIfUse());
         IPage page = new Page(currentPage, pageSize);
         mockDataDao.selectPage(page, lqw);
@@ -110,7 +111,7 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
     @Override
     public MockDataEntity handleRequest(HttpServletRequest request) {
         String url = request.getRequestURI();
-        log.info("url为" + url);
+        log.info("url为--" + url);
         log.info("请求头X-ClientId" + request.getHeader("X-ClientId"));
         log.info("body请求体" + getReqBody(request));
 
