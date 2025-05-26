@@ -3,7 +3,7 @@ package com.huifu.hw.controller;
 import com.huifu.hw.controller.utils.BaseResp;
 import com.huifu.hw.domain.MockDataEntity;
 import com.huifu.hw.service.MockDataService;
-import com.huifu.hw.service.MockRiskService;
+//import com.huifu.hw.service.MockRiskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ public class MockController {
     private MockDataService mockDataService;
 
     @Autowired
-    private MockRiskService mockRiskService;
+//    private MockRiskService mockRiskService;
 
     @RequestMapping("/rc/**")
     public ResponseEntity submitToRc(HttpServletRequest httpServletRequest){
