@@ -35,6 +35,7 @@ public class MockController {
     @RequestMapping("/**")
     public ResponseEntity getMockData(HttpServletRequest request) {
         log.info("测试javaovao");
+        log.info("在测试一下增量");
         MockDataEntity mockDataEntity = mockDataService.handleRequest(request);
         if (Objects.isNull(mockDataEntity)){
             return new ResponseEntity(new BaseResp("未找到对应MOCK数据"),HttpStatus.BAD_REQUEST);
