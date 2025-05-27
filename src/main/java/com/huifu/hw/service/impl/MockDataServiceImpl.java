@@ -150,6 +150,7 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
                 respMsg = respMsg.replaceFirst("_ACCT", String.valueOf(Math.abs(random.nextLong())));
             }
         }
+        log.info("ceshiyixia3333 ");
         mockDataEntity.setRespMsg(respMsg);
     }
 
