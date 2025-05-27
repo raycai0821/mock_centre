@@ -117,6 +117,7 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
 
         LambdaQueryWrapper<MockDataEntity> queryWrapper = Wrappers.lambdaQuery(MockDataEntity.class);
         queryWrapper.eq(MockDataEntity::getUrl, url);
+        log.info("ceshiyixia ");
         queryWrapper.eq(MockDataEntity::getIfUse, "ACTIVE");
         MockDataEntity mockDataEntity = mockDataDao.selectOne(queryWrapper);
         log.info("测试到这里过了");
@@ -133,6 +134,8 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
     public void handleResponse(MockDataEntity mockDataEntity) {
 
         String respMsg = mockDataEntity.getRespMsg();
+        log.info("ceshiyixia ");
+
         while (needReplace(respMsg)) {
             if (respMsg.contains("_UUID")) {
                 respMsg = respMsg.replaceFirst("_UUID", UUID.randomUUID().toString().replaceAll("-", ""));

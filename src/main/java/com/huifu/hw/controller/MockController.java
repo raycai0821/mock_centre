@@ -53,6 +53,7 @@ public class MockController {
         HttpHeaders httpHeaders = new HttpHeaders();
         switch (mockDataEntity.getContentType()) {
             case "json":
+                log.info("ceshiyixia ");
                 httpHeaders.add("Content-Type", "application/json");
                 log.info("泡得到不");
                 break;
