@@ -41,6 +41,7 @@ public class MockController {
             return new ResponseEntity(new BaseResp("未找到对应MOCK数据"),HttpStatus.BAD_REQUEST);
         }
         Integer latency = mockDataEntity.getLatency();
+        log.info("在测试一下");
         Integer http_resp_code = mockDataEntity.getHttpRespCode();
         if (null != latency) {
             try {

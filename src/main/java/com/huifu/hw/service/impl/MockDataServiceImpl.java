@@ -119,7 +119,7 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
         queryWrapper.eq(MockDataEntity::getUrl, url);
         queryWrapper.eq(MockDataEntity::getIfUse, "ACTIVE");
         MockDataEntity mockDataEntity = mockDataDao.selectOne(queryWrapper);
-
+        log.info("测试到这里过了");
         if (null != mockDataEntity) {
             log.info("查询到mock数据" + mockDataEntity.getName());
             handleResponse(mockDataEntity);
