@@ -48,6 +48,7 @@ public class MockDataServiceImpl extends ServiceImpl<MockDataDao, MockDataEntity
     @Override
     public Result saveMockData(MockDataEntity mockDataEntity) {
         log.info("保存前开始校验请求");
+        log.info("这是是新增");
         Result validateResult = validatePageRequest(mockDataEntity);
 
         if (validateResult.getFlag()) {
